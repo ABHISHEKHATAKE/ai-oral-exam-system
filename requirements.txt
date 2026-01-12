@@ -10,3 +10,5 @@ redis
 groq
 python-dotenv
 email-validator
+argon2-cffi==25.1.0
+argon2-cffi-bindings==25.1.0
