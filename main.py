@@ -4,7 +4,6 @@ from app.api.routes import auth, students, exams, instructor
 from app.core.config import get_settings
 import os
 import uvicorn
-
 settings = get_settings()
 
 app = FastAPI(
@@ -13,10 +12,10 @@ app = FastAPI(
     docs_url="/api/docs"
 )
 
-# CORS Configuration (allow all for now, restrict later)
+# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000", "http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -46,18 +45,17 @@ def health_check():
 @app.on_event("startup")
 async def startup_event():
     print("🚀 AI Oral Examination System Starting...")
-    print("📚 Documentation: /api/docs")
-
-    # Create required folders
+    print(f"📚 Documentation: http://localhost:8000/api/docs")
+    
+    # Create necessary directories
     os.makedirs("results", exist_ok=True)
     os.makedirs("uploads", exist_ok=True)
 
-# Render / Docker entrypoint
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-
+    
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
-        port=port
+        port=8000,
+        reload=True
     )
